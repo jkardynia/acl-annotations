@@ -1,6 +1,11 @@
 <?php
 namespace jkardynia\Annotations\Permissions\Acl;
 
+/**
+ * AclTest
+ *
+ * @author Jarosław Kardynia
+ */
 class AclTest extends \PHPUnit_Framework_TestCase{
     
     /** @test */
@@ -46,6 +51,13 @@ class AclTest extends \PHPUnit_Framework_TestCase{
         
         $this->assertEquals(array("guest", "admin"), $annotation1->getRoles());
         $this->assertEquals(array("guest", "admin"), $annotation2->getRoles());
+    }
+    
+    /** @test */
+    public function annotationReturnsProvidedType(){
+        $annotation = new Acl(array("value" => "Deny", "roles" => "guest,admin"));
+        
+        $this->assertEquals("Deny", $annotation->getType());
     }
 }
 

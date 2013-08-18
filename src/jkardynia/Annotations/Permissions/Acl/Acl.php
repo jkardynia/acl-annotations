@@ -5,6 +5,8 @@ namespace jkardynia\Annotations\Permissions\Acl;
  * Acl annotation
  *
  * @author Jarosław Kardynia
+ * 
+ * @Annotation
  */
 class Acl {
     
