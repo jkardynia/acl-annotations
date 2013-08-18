@@ -1,8 +1,6 @@
 <?php
 namespace Jkardynia\Annotations\Permissions\Acl;
 
-use \Jkardynia\Annotations\Permissions\Acl\Acl;
-
 class AclTest extends \PHPUnit_Framework_TestCase{
     
     /** @test */
