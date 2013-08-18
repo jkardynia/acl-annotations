@@ -6,3 +6,4 @@ extras/documentation
 
 /vendor
 /bin
+/composer.lock
