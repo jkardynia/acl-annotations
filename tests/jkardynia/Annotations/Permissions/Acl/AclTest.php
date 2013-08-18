@@ -1,7 +1,6 @@
 <?php
 namespace Jkardynia\Annotations\Permissions\Acl;
 
-require_once '\vendor\autoload.php';
 use \Jkardynia\Annotations\Permissions\Acl\Acl;
 
 class AclTest extends \PHPUnit_Framework_TestCase{
