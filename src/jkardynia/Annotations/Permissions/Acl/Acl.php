@@ -12,6 +12,7 @@ class Acl {
     const DENY_ACCESS_TYPE_NAME = "Deny";
     
     private $type = "";
+    private $roles = array();
     
     public function __construct($params){
         
@@ -19,6 +20,7 @@ class Acl {
         $this->checkIfParamsAreCorrect($params);
         
         $this->type = $params["value"];
+        $this->roles = array_map('trim', explode(",", $params["roles"]));
     }
     
     private function checkForRequiredParameters($params){
@@ -35,6 +37,14 @@ class Acl {
             self::DENY_ACCESS_TYPE_NAME))){
             throw new \InvalidArgumentException("Wrong ACL type.");
         }
+    }
+    
+    public function getType(){
+        return $this->type;
+    }
+    
+    public function getRoles(){
+        return $this->roles;
     }
 }
 

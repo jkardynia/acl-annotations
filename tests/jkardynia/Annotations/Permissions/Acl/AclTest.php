@@ -5,9 +5,9 @@ class AclTest extends \PHPUnit_Framework_TestCase{
     
     /** @test */
     public function initializeAnnotationWithCorrectParams(){
-        $aclAnnotation = new Acl(array("value" => "Allow",
+        $annotation = new Acl(array("value" => "Allow",
             "roles" => "guest"));
-        $this->assertNotNull($aclAnnotation);
+        $this->assertNotNull($annotation);
     }
     
     /** 
@@ -15,7 +15,7 @@ class AclTest extends \PHPUnit_Framework_TestCase{
      * @expectedException \InvalidArgumentException
      */
     public function initializeAnnotationWithWrongParamsRisesException(){
-        $aclAnnotation = new Acl(array("val" => "Allow"));
+        $annotation = new Acl(array("val" => "Allow"));
     }
     
     /** @test */
@@ -29,7 +29,23 @@ class AclTest extends \PHPUnit_Framework_TestCase{
      * @expectedException \InvalidArgumentException
      */
     public function wrongAnnotationTypeRisesException(){
-        $allowAnnotation = new Acl(array("value" => "WrongType", "roles" => "guest"));
+        $annotation = new Acl(array("value" => "WrongType", "roles" => "guest"));
+    }
+    
+    /** @test */
+    public function singleRoleIsProvided(){
+        $annotation = new Acl(array("value" => "Allow", "roles" => "guest"));
+        
+        $this->assertEquals(array("guest"), $annotation->getRoles());
+    }
+    
+    /** @test */
+    public function multipleRolesAreProvided(){
+        $annotation1 = new Acl(array("value" => "Allow", "roles" => "guest,admin"));
+        $annotation2 = new Acl(array("value" => "Allow", "roles" => " guest , admin   "));
+        
+        $this->assertEquals(array("guest", "admin"), $annotation1->getRoles());
+        $this->assertEquals(array("guest", "admin"), $annotation2->getRoles());
     }
 }
 
