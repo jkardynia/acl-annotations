@@ -1,0 +1,7 @@
+<phpunit>
+  <testsuites>
+    <testsuite name="acl-annotations">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
