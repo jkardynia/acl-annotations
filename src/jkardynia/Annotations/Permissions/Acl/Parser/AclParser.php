@@ -5,6 +5,7 @@ use Doctrine\Common\Annotations\Reader;
 use Zend\Permissions\Acl\Acl;
 use jkardynia\Annotations\Permissions\Acl\Acl as AclAnnot;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+use jkardynia\Annotations\Permissions\Acl\Resource as ResourceAnnot;
 
 /**
  * AclParser
@@ -22,43 +23,42 @@ class AclParser {
      * @var string 
      */
     private $annotationClass = 'jkardynia\Annotations\Permissions\Acl\Acl';
-    
-    /**
-     * @var Acl 
-     */
-    private $acl = null;
-    
-    public function __construct(Acl $acl, Reader $reader){
-        $this->acl = $acl;
+      
+    public function __construct(Reader $reader){
         $this->reader = $reader;
     }
     
     /**
      *
      * @param mixed $aclResourceObject
-     * @return Acl 
+     * @return array 
      */
-    public function extractAcl($aclResourceObject, $user){
+    public function extractAcl($aclResourceObject){
         $reflectionObject = new \ReflectionObject($aclResourceObject);
+        $extractedAclParams = array();
         
         foreach ($reflectionObject->getMethods() as $reflectionMethod) {
             $annotation = $this->reader->getMethodAnnotation($reflectionMethod, $this->annotationClass);
             
             if (null !== $annotation) {
                 $type = $this->getType($annotation);
-                $roleName = "admin";//$user->getRole();
-                $resourceName = $this->getResourceName($reflectionMethod);
-
-                $this->acl->addResource($resourceName);
-                $this->acl->setRule(Acl::OP_ADD, $type, $roleName, $resourceName);
+                $rolesNames = $annotation->getRoles();
+                $resourceName = $this->getResourceName($reflectionObject, $reflectionMethod);
+                
+                $resource = new ResourceAnnot($resourceName);
+                $resource->setOperator(Acl::OP_ADD);
+                $resource->setRoles($rolesNames);
+                $resource->setType($type);
+                
+                $extractedAclParams[] = $resource;
             }
         }
         
-        return $this->acl;
+        return $extractedAclParams;
     }
     
-    private function getResourceName(\ReflectionMethod $reflectionMethod){
-        return "jkardynia_Annotations_Permissions_Acl_Parser_AclResourceMock::".$reflectionMethod->getName();
+    private function getResourceName(\ReflectionObject $reflectionObject, \ReflectionMethod $reflectionMethod){
+        return $reflectionObject->getName()."::".$reflectionMethod->getName();
     }
     
     private function getType(AclAnnot $annotation){

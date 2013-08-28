@@ -15,18 +15,53 @@ use Doctrine\Common\Annotations\AnnotationReader;
 class AclParserTest extends \PHPUnit_Framework_TestCase{
     
     /** @test */
-    public function extractsRolesFromResource(){
-        $predefinedAcl = new Acl();
+    public function extractOperator(){
         
-        $predefinedAcl->addRole("admin");
-        $predefinedAcl->addRole("guest", "admin");
+        $aclParser = new AclParser(new AnnotationReader());
+        $acl = new \Zend\Permissions\Acl\Acl();
+        $actualAclParams = $aclParser->extractAcl(new AclResourceMock($acl));
+        $firstAclParam = $actualAclParams[0];
         
-        $aclParser = new AclParser($predefinedAcl, new AnnotationReader());
-        $acl = $aclParser->extractAcl(new AclResourceMock(), null);
+        $this->assertEquals(Acl::OP_ADD, $firstAclParam->getOperator());
+    }
+    
+    /** @test */
+    public function getProvidedPermissionType(){
         
-        $this->assertTrue($acl->isAllowed("guest", "jkardynia_Annotations_Permissions_Acl_Parser_AclResourceMock::doSomeGuestStuf"));
-        $this->assertTrue($acl->isAllowed("admin", "jkardynia_Annotations_Permissions_Acl_Parser_AclResourceMock::doSomeAdminStuf"));
+        $aclParser = new AclParser(new AnnotationReader());
+        $acl = new \Zend\Permissions\Acl\Acl();
+        $actualAclParams = $aclParser->extractAcl(new AclResourceMock($acl));
+        $firstAclParam = $actualAclParams[0];
+        $secondAclParam = $actualAclParams[1];
+        
+        
+        $this->assertEquals(Acl::TYPE_ALLOW, $firstAclParam->getType());
+        $this->assertEquals(Acl::TYPE_DENY, $secondAclParam->getType());
+    }
+    
+    /** @test */
+    public function getProvidedRoles(){
+        
+        $aclParser = new AclParser(new AnnotationReader());
+        $acl = new \Zend\Permissions\Acl\Acl();
+        $actualAclParams = $aclParser->extractAcl(new AclResourceMock($acl));
+        $firstAclParam = $actualAclParams[0];
+        $secondAclParam = $actualAclParams[1];
+        
+        $this->assertEquals(array("admin"), $firstAclParam->getRoles());
+        $this->assertEquals(array("guest"), $secondAclParam->getRoles());
+    }
+    
+    /** @test */
+    public function extractResourceName(){
+        
+        $aclParser = new AclParser(new AnnotationReader());
+        $acl = new \Zend\Permissions\Acl\Acl();
+        $actualAclParams = $aclParser->extractAcl(new AclResourceMock($acl));
+        $firstAclParam = $actualAclParams[0];
+        $secondAclParam = $actualAclParams[1];
+        
+        $this->assertEquals('jkardynia\Annotations\Permissions\Acl\Parser\AclResourceMock::doSomeAdminStuff', $firstAclParam->getName());
+        $this->assertEquals('jkardynia\Annotations\Permissions\Acl\Parser\AclResourceMock::doSomeGuestStuff', $secondAclParam->getName());
     }
 }
-
-?>

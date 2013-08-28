@@ -10,16 +10,26 @@ use jkardynia\Annotations\Permissions\Acl\Acl;
 class AclResourceMock {
     
     /**
+     * @var \Zend\Permissions\Acl\Acl 
+     */
+    private $acl = null;
+    
+    public function __construct(\Zend\Permissions\Acl\Acl $acl){
+        $this->acl = $acl;
+    }
+
+
+    /**
      * @Acl("Allow", roles="admin") 
      */
-    public function doSomeAdminStuf(){
+    public function doSomeAdminStuff(){
         
     }
     
     /**
-     * @Acl("Allow", roles="guest") 
+     * @Acl("Deny", roles="guest") 
      */
-    public function doSomeGuestStuf(){
+    public function doSomeGuestStuff(){
         
     }
 }
