@@ -8,16 +8,6 @@ use jkardynia\Annotations\Permissions\Acl\Acl;
  * @author Jarosław Kardynia
  */
 class AclResourceMock {
-    
-    /**
-     * @var \Zend\Permissions\Acl\Acl 
-     */
-    private $acl = null;
-    
-    public function __construct(\Zend\Permissions\Acl\Acl $acl){
-        $this->acl = $acl;
-    }
-
 
     /**
      * @Acl("Allow", roles="admin") 
@@ -27,7 +17,7 @@ class AclResourceMock {
     }
     
     /**
-     * @Acl("Deny", roles="guest") 
+     * @Acl("Allow", roles="guest") 
      */
     public function doSomeGuestStuff(){
         

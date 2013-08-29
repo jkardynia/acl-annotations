@@ -36,7 +36,7 @@ class AclParserTest extends \PHPUnit_Framework_TestCase{
         
         
         $this->assertEquals(Acl::TYPE_ALLOW, $firstAclParam->getType());
-        $this->assertEquals(Acl::TYPE_DENY, $secondAclParam->getType());
+        $this->assertEquals(Acl::TYPE_ALLOW, $secondAclParam->getType());
     }
     
     /** @test */
