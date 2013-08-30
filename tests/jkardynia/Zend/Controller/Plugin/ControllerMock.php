@@ -12,16 +12,20 @@ use \jkardynia\Annotations\Permissions\Acl\Acl;
 class ControllerMock extends AbstractActionController{
 
     /**
-     * @Acl("Deny", roles="guest") 
+     * @Acl("Deny", roles="guest")
      */
-    public function annotationTest1Action(){
+    public function deniedAction(){
         // do something good
     }
     
     /**
      * @Acl("Allow", roles="admin") 
      */
-    public function annotationTest2Action(){
+    public function allowedForAdminAction(){
         // do something nice
+    }
+
+    public function notAnnotatedAction(){
+        // do something bad
     }
 }

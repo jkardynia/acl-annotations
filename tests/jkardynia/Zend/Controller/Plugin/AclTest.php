@@ -16,11 +16,11 @@ use \jkardynia\Zend\Permissions\Acl\AclItemsCollector;
 class AclTest extends \PHPUnit_Framework_TestCase{
     
     /** @test */
-    public function accessToActionShouldBeAllowed(){
+    public function accessToActionShouldBeGrantedForAllowedUser(){
         
         // given
         $acl = $this->getZendAcl();
-        $mvcEvent = $this->getMvcEventMock('annotation-test2');
+        $mvcEvent = $this->getMvcEventMock('allowed-for-admin');
         
         $collector = new AclItemsCollector($acl);
         $collector->addEntriesFromResourceClass(get_class($mvcEvent->getTarget()));
@@ -28,8 +28,8 @@ class AclTest extends \PHPUnit_Framework_TestCase{
         $plugin = new Acl($acl);
         $currentUserRole = new GenericRole("admin");
         
-        // when
-        $plugin->checkAccess($mvcEvent, $currentUserRole);
+        // then
+        $this->assertTrue($plugin->checkAccess($mvcEvent, $currentUserRole));
     }
     
     /** 
@@ -40,7 +40,7 @@ class AclTest extends \PHPUnit_Framework_TestCase{
 
         // given
         $acl = $this->getZendAcl();
-        $mvcEvent = $this->getMvcEventMock('annotation-test1');
+        $mvcEvent = $this->getMvcEventMock('denied');
         
         $collector = new AclItemsCollector($acl);
         $collector->addEntriesFromResourceClass(get_class($mvcEvent->getTarget()));
@@ -52,9 +52,46 @@ class AclTest extends \PHPUnit_Framework_TestCase{
         $plugin->checkAccess($mvcEvent, $currentUserRole);
     }
     
-    /** @test */
-    public function notSpecifiedAccessIsDeniedByDefault(){
-        //todo
+    /** 
+     * @test
+     * @expectedException \Zend\Permissions\Acl\Exception\InvalidArgumentException
+     */
+    public function notSpecifiedAccessForActionRaisesException(){
+        // given
+        $acl = $this->getZendAcl();
+        $mvcEvent = $this->getMvcEventMock('not-annotated');
+        
+        $collector = new AclItemsCollector($acl);
+        $collector->addEntriesFromResourceClass(get_class($mvcEvent->getTarget()));
+        
+        $plugin = new Acl($acl);
+        $currentUserRole = new GenericRole("guest");
+        
+        // when
+        $plugin->checkAccess($mvcEvent, $currentUserRole);
+    }
+    
+    /** 
+     * @test 
+     * @expectedException \jkardynia\Zend\Controller\Exception\AccessDeniedException
+     * @expectedExceptionMessage Access for role 'guest' is denied for controller 'jkardynia\Zend\Controller\Plugin\ControllerMock::allowedForAdminAction'
+     */
+    public function accessAllowedToAdminIsDeniedForGuest(){
+        
+        // given
+        $acl = $this->getZendAcl();
+        $mvcEvent = $this->getMvcEventMock('allowed-for-admin');
+        
+        $collector = new AclItemsCollector($acl);
+        $collector->addEntriesFromResourceClass(get_class($mvcEvent->getTarget()));
+        
+        $plugin = new Acl($acl);
+        $currentUserRoleAdmin = new GenericRole("admin");
+        $currentUserRoleGuest = new GenericRole("guest");
+        
+        // then
+        $this->assertTrue($plugin->checkAccess($mvcEvent, $currentUserRoleAdmin));
+        $plugin->checkAccess($mvcEvent, $currentUserRoleGuest);
     }
     
     /**
@@ -77,7 +114,7 @@ class AclTest extends \PHPUnit_Framework_TestCase{
         $acl = new \Zend\Permissions\Acl\Acl();
         
         $acl->addRole(new GenericRole("guest"));
-        $acl->addRole(new GenericRole("admin"));
+        $acl->addRole(new GenericRole("admin", "guest"));
         
         return $acl;
     }

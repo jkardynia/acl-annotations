@@ -23,18 +23,17 @@ class AclItemsCollector {
      */
     private $aclParser = null;
     
-    private $ignoredAnnotations = array('events');
+    /**
+     * This is a list of additional annotations that should be ignored by
+     * default annotation reader (like @param, @author and so on).
+     */
+    public $ignoredAnnotations = array('events');
     
     /**
      * @param \Zend\Permissions\Acl\Acl $acl
      * @param AclParser $aclParser 
      */
-    public function __construct(\Zend\Permissions\Acl\Acl $acl = null, AclParser $aclParser = null, $ignoreAdditionalAnnotations = true){
-        if(true === $ignoreAdditionalAnnotations){
-            foreach($this->ignoredAnnotations as $annotName){
-                AnnotationReader::addGlobalIgnoredName($annotName);
-            }
-        }
+    public function __construct(\Zend\Permissions\Acl\Acl $acl = null, AclParser $aclParser = null){
         
         if(null === $acl){
             $this->zendAcl = new \Zend\Permissions\Acl\Acl();
@@ -43,9 +42,16 @@ class AclItemsCollector {
         }
         
         if(null === $aclParser){
+            $this->addIgnoredAnnotationsToDefaultReader();
             $this->aclParser = new AclParser(new AnnotationReader());
         }else{
             $this->aclParser = $aclParser;
+        }
+    }
+    
+    private function addIgnoredAnnotationsToDefaultReader(){
+        foreach($this->ignoredAnnotations as $annotName){
+            AnnotationReader::addGlobalIgnoredName($annotName);
         }
     }
     
@@ -69,9 +75,5 @@ class AclItemsCollector {
      */
     public function getAcl(){
         return $this->zendAcl;
-    }
-    
-    public function addAnnotationToIgnore($annotationName){
-        $this->ignoredAnnotations[] = $annotationName;
     }
 }
