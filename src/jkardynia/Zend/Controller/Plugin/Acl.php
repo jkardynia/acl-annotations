@@ -29,31 +29,27 @@ class Acl extends AbstractPlugin{
     
     public function checkAccess(MvcEvent $event, RoleInterface $userRole){
         
-        $controller = $event->getTarget();
         $resourceName = $this->getResourceName($event);
-        
+
         if(false === $this->zendAcl->isAllowed($userRole, $resourceName)){
-            throw new AccessDeniedException("Access for role '".$userRole->getRoleId()."' is denied for controller '". $controller->getName() ."'.");
+            throw new AccessDeniedException("Access for role '".$userRole->getRoleId()."' is denied for controller '". $resourceName ."'.");
         }
+        return true;
     }
     
     private function getResourceName(MvcEvent $event){
-        //todo find a way to get action name
-        $controller = $event->getTarget();
-        
-        $routeMatch = $event->getRouteMatch();
-        if (!$routeMatch) {
-            /**
-             * @todo Determine requirements for when route match is missing.
-             *       Potentially allow pulling directly from request metadata?
-             */
-            throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
-        }
 
-        $action = $routeMatch->getParam('action', 'not-found');
-        $methodName = Zend\Mvc\Controller\AbstractController::getMethodFromAction($action);
+        $controller = $event->getTarget();
+        $routeMatch = $event->getRouteMatch();
         
-        return get_class($controller).'::'.$methodName;
+        if ($routeMatch) {
+            $action = $routeMatch->getParam('action', 'not-found');
+            $methodName = \Zend\Mvc\Controller\AbstractController::getMethodFromAction($action);
+
+            return get_class($controller).'::'.$methodName;
+        }
+        
+        return '';
     }
     
     /**

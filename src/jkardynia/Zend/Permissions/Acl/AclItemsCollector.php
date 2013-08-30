@@ -23,11 +23,18 @@ class AclItemsCollector {
      */
     private $aclParser = null;
     
+    private $ignoredAnnotations = array('events');
+    
     /**
      * @param \Zend\Permissions\Acl\Acl $acl
      * @param AclParser $aclParser 
      */
-    public function __construct(\Zend\Permissions\Acl\Acl $acl = null, AclParser $aclParser = null){
+    public function __construct(\Zend\Permissions\Acl\Acl $acl = null, AclParser $aclParser = null, $ignoreAdditionalAnnotations = true){
+        if(true === $ignoreAdditionalAnnotations){
+            foreach($this->ignoredAnnotations as $annotName){
+                AnnotationReader::addGlobalIgnoredName($annotName);
+            }
+        }
         
         if(null === $acl){
             $this->zendAcl = new \Zend\Permissions\Acl\Acl();
@@ -62,5 +69,9 @@ class AclItemsCollector {
      */
     public function getAcl(){
         return $this->zendAcl;
+    }
+    
+    public function addAnnotationToIgnore($annotationName){
+        $this->ignoredAnnotations[] = $annotationName;
     }
 }

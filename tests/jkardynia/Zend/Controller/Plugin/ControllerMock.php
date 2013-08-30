@@ -9,12 +9,19 @@ use \jkardynia\Annotations\Permissions\Acl\Acl;
  *
  * @author Jarosław Kardynia
  */
-class ControllerMock {//extends AbstractActionController{
+class ControllerMock extends AbstractActionController{
 
     /**
      * @Acl("Deny", roles="guest") 
      */
-    public function annotationTestAction(){
+    public function annotationTest1Action(){
         // do something good
+    }
+    
+    /**
+     * @Acl("Allow", roles="admin") 
+     */
+    public function annotationTest2Action(){
+        // do something nice
     }
 }

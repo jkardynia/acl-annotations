@@ -7,4 +7,4 @@ namespace jkardynia\Zend\Controller\Exception;
  * @author Jarosław Kardynia
  * 
  */
-class AccessDeniedException { }
+class AccessDeniedException extends \Exception { }
