@@ -4,7 +4,6 @@ namespace jkardynia\Annotations\Permissions\Acl\Parser;
 use Doctrine\Common\Annotations\Reader;
 use Zend\Permissions\Acl\Acl;
 use jkardynia\Annotations\Permissions\Acl\Acl as AclAnnot;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use jkardynia\Annotations\Permissions\Acl\Resource as ResourceAnnot;
 
 /**
@@ -61,6 +60,9 @@ class AclParser {
         return $reflectionObject->getName()."::".$reflectionMethod->getName();
     }
     
+    /**
+     * @return string
+     */
     private function getType(AclAnnot $annotation){
         if($annotation->getType() === AclAnnot::ALLOW_ACCESS_TYPE_NAME){
             return Acl::TYPE_ALLOW;
