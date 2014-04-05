@@ -1,8 +1,8 @@
 acl-annotations
 ===================
-[![Build Status](https://api.travis-ci.org/jjarekk/acl-annotations.png?branch=master)](https://travis-ci.org/jjarekk/acl-annotations)
-
-(If code coverage is under 75% build is failing).
+[![Build Status](https://api.travis-ci.org/jkardynia/acl-annotations.png?branch=master)](https://travis-ci.org/jjarekk/acl-annotations)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jkardynia/acl-annotations/badges/quality-score.png?s=96cf6db627fd33471fb56316fba96877ada46906)](https://scrutinizer-ci.com/g/jkardynia/acl-annotations/)
+[![Code Coverage](https://scrutinizer-ci.com/g/jkardynia/acl-annotations/badges/coverage.png?s=c1fe16594af21a34a8256fdb93364760ddb37cb3)](https://scrutinizer-ci.com/g/jkardynia/acl-annotations/)
 
 
 Annotations for ACL with Zend Framework 2.
