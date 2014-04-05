@@ -1,4 +1,15 @@
 {
+    "name": "jkardynia/acl-annot",
+    "type": "library",
+    "description": "Acl annotations for Zend Framewrok 2",
+    "keywords": ["acl","annotation"],
+	"license": "GPL",
+    "authors": [
+        {
+            "name": "Jaroslaw Kardynia",
+            "email": "jkardynia@gmail.com"
+        }
+    ],
     "repositories": [
         {
             "type": "composer",
