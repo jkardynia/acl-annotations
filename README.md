@@ -10,8 +10,11 @@ This package allows you to write ACL rules just in your Zend controllers using a
 
 Installation
 ============
-Currently there is no composer repository for this package. You should simply download
-sources and configure your autoloader library.
+You can install it via composer. Just add this to your dependencies in composer.json:
+
+
+    "jkardynia/acl-annot": "*"
+
 
 Usage
 ============
