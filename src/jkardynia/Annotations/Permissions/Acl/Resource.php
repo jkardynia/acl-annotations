@@ -28,6 +28,9 @@ class Resource {
      */
     private $roles = array();
     
+    /**
+     * @param string $resourceName
+     */
     public function __construct($resourceName){
         $this->name = $resourceName;
     }
